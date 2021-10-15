@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shmup", "Shmup.vcxproj", "{915F573C-1CB3-473A-AB27-AC68DC2A3DB3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShmupTests", "..\ShmupTests\ShmupTests.vcxproj", "{6006CDBD-A928-43F9-BAAA-FD3FD95CBD9E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShmupTests", "ShmupTests\ShmupTests.vcxproj", "{6006CDBD-A928-43F9-BAAA-FD3FD95CBD9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
