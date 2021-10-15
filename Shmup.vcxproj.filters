@@ -13,5 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\ECS">
+      <UniqueIdentifier>{89f62ed1-750b-4e2f-b88f-5e1596476fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Entity">
+      <UniqueIdentifier>{45f4f7b9-f227-4e79-aeef-dff8b1505048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Component">
+      <UniqueIdentifier>{ed0940bd-f0db-421f-be93-89bd580a7bf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\System">
+      <UniqueIdentifier>{5263a075-8b4f-4f23-b38d-bc687825919b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SDL2">
+      <UniqueIdentifier>{6982c75b-c37a-4ecc-9627-0515eeef92e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{d659d723-fff4-4394-9485-47a23a4f9574}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\ECS\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Header Files\ECS\Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
