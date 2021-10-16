@@ -8,8 +8,18 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ShmupTests
 {
-	class dummy1 : public Component {}; class dummy2 : public Component {};
-	class dummy3 : public Component {}; class dummy4 : public Component {};
+	class dummy1 : public Component 
+	{
+	public:
+		int testInt = 5;
+	}; 
+	class dummy2 : public Component 
+	{
+	public:
+		bool testBool = true;
+	};
+	class dummy3 : public Component {}; 
+	class dummy4 : public Component {};
 	// NOTE: CompManager has static members, so values will
 	// remain consistent throughout all tests.
 	TEST_CLASS(CompManagerTests)
@@ -53,9 +63,9 @@ namespace ShmupTests
 	TEST_CLASS(EntityTests)
 	{
 	public:
-		Entity e;
 		TEST_METHOD(TestAddAndHas)
 		{
+			Entity e;
 			e.add<dummy1>();
 			e.add<dummy2>();
 
@@ -68,8 +78,9 @@ namespace ShmupTests
 		}
 		TEST_METHOD(TestGet)
 		{
+			Entity e;
 			e.add<dummy1>();
-			dummy1 dummy = e.get<dummy1>();
+			dummy1 comp1 = e.get<dummy1>();
 		}
 	};
 }

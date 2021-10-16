@@ -31,6 +31,9 @@
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{d659d723-fff4-4394-9485-47a23a4f9574}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Linalg">
+      <UniqueIdentifier>{e6553875-8386-46c2-8987-603a9738aca4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -41,6 +44,12 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Header Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcreteComponents.h">
+      <Filter>Header Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="linalg.h">
+      <Filter>Header Files\Linalg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

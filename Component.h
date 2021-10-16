@@ -16,7 +16,7 @@ public:
 };
 typedef CompManager CmpMngr;
 
-class Component
+struct Component
 {
 private:
 public:
