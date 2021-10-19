@@ -2,7 +2,7 @@
 #include "CppUnitTest.h"
 #include "Component.h"
 #include "Component.cpp"
-#include "Entity.h"
+#include "EntityManager.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -81,6 +81,54 @@ namespace ShmupTests
 			Entity e;
 			e.add<dummy1>();
 			dummy1 comp1 = e.get<dummy1>();
+		}
+	};
+	TEST_CLASS(EntityFactoryTests)
+	{
+		TEST_METHOD(TestJustMake)
+		{
+			EntityFactory ef;
+			Entity& e = ef.make<dummy1>();
+		}
+	};
+	TEST_CLASS(EntityManagerTests)
+	{
+		TEST_METHOD(TestJustMake)
+		{
+			EntityManager em;
+			em.make<dummy1>();
+			em.make<dummy3>();
+			em.make<dummy3>();
+			em.make<dummy2>();
+			Assert::IsTrue(em.numEntities() == 0);
+			em.update();
+			Assert::IsTrue(em.numEntities() == 4);
+		}
+		TEST_METHOD(TestDeleteOnUpdate)
+		{
+			EntityManager em;
+			em.make<dummy1>();
+			em.make<dummy3>();
+			em.make<dummy3>();
+			Entity& e = em.make<dummy2>();
+			em.update();
+			Assert::IsTrue(em.numEntities() == 4);
+			e.active = false;
+			em.update();
+			Assert::IsTrue(em.numEntities() == 3);
+		}
+		TEST_METHOD(TestGet)
+		{
+			EntityManager em;
+			Entity& e = em.make<dummy4>();
+			e.add<dummy1>().testInt = 5;
+			em.make<dummy4>().add<dummy2>().testBool = 3;
+			em.make<dummy4>().add<dummy3>();
+			em.make<dummy4>().add<dummy3>();
+			Assert::IsTrue(em.get<dummy3>().size() == 0);
+			em.update();
+			Assert::IsTrue(em.get<dummy3>().size() == 2);
+			Assert::IsTrue(&(**(em.get<dummy1>().begin())) == &e);
 		}
 	};
 }

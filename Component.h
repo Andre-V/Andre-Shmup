@@ -8,7 +8,8 @@ private:
 	static int genNewTypeID() { return _size++; }
 public:
 	static int size() { return _size; }
-	template<typename T> static int getTypeID()
+	template<typename T> 
+	static int getTypeID()
 	{
 		static int typeID = genNewTypeID();
 		return typeID;

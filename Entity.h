@@ -48,7 +48,7 @@ public:
 		checkCapacity(index);
 		return _key[CmpMngr::getTypeID<T>()];
 	}
-
+	// adds new component
 	template<typename T>
 	T& add()
 	{

@@ -26,5 +26,6 @@ struct HitBox : public Component
 };
 struct TextureBox : public Component
 {
+	Rect rect;
 	Texture texture;
 };

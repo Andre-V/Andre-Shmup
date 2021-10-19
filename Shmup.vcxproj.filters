@@ -57,6 +57,15 @@
     <ClInclude Include="Rect.h">
       <Filter>Header Files\SDL2</Filter>
     </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="IEntityRequests.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
