@@ -3,7 +3,7 @@
 
 struct Rect
 {
-	float x, y, w, h;
+	float x = 0, y = 0, w = 0, h = 0;
 	float centerX() { return x + (w / 2); }
 	float centreY() { return y + (h / 2); }
 	void centreX(float x) { this->x = x - (w / 2); }
@@ -12,6 +12,6 @@ struct Rect
 	float bottomY() { return y + h; }
 	SDL_Rect sdlRect()
 	{
-		return { x, y, w, h };
+		return { (int)x, (int)y, (int)w, (int)h };
 	}
 };

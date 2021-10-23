@@ -22,10 +22,11 @@ struct Velocity : public Component
 };
 struct HitBox : public Component
 {
-	Rect rect;
+	float w;
+	float h;
 };
 struct TextureBox : public Component
 {
-	Rect rect;
+	//Rect rect;
 	Texture texture;
 };

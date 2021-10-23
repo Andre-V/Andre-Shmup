@@ -72,6 +72,9 @@
     <ClInclude Include="SystemManager.h">
       <Filter>Header Files\ECS\System</Filter>
     </ClInclude>
+    <ClInclude Include="ConcreteSystems.h">
+      <Filter>Header Files\ECS\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

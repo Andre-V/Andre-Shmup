@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="ConcreteComponents.h" />
+    <ClInclude Include="ConcreteSystems.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityManager.h" />

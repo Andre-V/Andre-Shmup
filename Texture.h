@@ -9,7 +9,7 @@ public:
 	SDL_Texture* texture;
 	SDL_Renderer* renderer;
 
-	Texture() = default;
+	Texture() : texture(nullptr), renderer(nullptr) {}
 	~Texture() { deallocate(); }
 
 	Texture(SDL_Renderer* renderer, std::string path)
@@ -46,5 +46,13 @@ public:
 	void render(SDL_Rect& rect)
 	{
 		SDL_RenderCopy(renderer, texture, nullptr, &rect);
+	}
+	void render(SDL_Rect rect)
+	{
+		SDL_RenderCopy(renderer, texture, nullptr, &rect);
+	}
+	void render(Rect& rect)
+	{
+		this->render(rect.sdlRect());
 	}
 };

@@ -11,9 +11,12 @@ struct GameInfo
 	const int SCREEN_WIDTH;
 	const int SCREEN_HEIGHT;
 	const char* WINDOW_TITLE;
+	SDL_Window* sdlWindow;
+	SDL_Renderer* sdlRenderer;
 
 	GameInfo(const int width, const int height, const char* title)
-		: SCREEN_WIDTH(width), SCREEN_HEIGHT(height), WINDOW_TITLE(title)
+		: SCREEN_WIDTH(width), SCREEN_HEIGHT(height), WINDOW_TITLE(title),
+		sdlWindow(nullptr), sdlRenderer(nullptr)
 	{
 
 	}
@@ -39,6 +42,8 @@ public:
 			_gameInfo.SCREEN_WIDTH, _gameInfo.SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		SDL_SetRenderDrawColor(_sdlRenderer, 0x00, 0x00, 0x00, 0x00);
+		_gameInfo.sdlWindow = _sdlWindow;
+		_gameInfo.sdlRenderer = _sdlRenderer;
 	}
 	void update()
 	{
@@ -56,9 +61,13 @@ public:
 		system->entitySource = &_entitySource;
 		_systemManager.addSystem(system, priority);
 	}
-	EntityRequests& getEntityRequests()
+	EntityRequests& enttReq()
 	{
 		return _entitySource;
+	}
+	GameInfo& info()
+	{
+		return _gameInfo;
 	}
 };
 

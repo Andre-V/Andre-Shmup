@@ -2,6 +2,7 @@
 #include "Entity.h"
 
 class Something;
+class Player;
 
 class EntityFactory
 {
@@ -17,4 +18,5 @@ public:
 	{
 
 	}
+
 };
