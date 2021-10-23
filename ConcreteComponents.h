@@ -8,6 +8,9 @@
 using namespace linalg;
 using namespace aliases;
 
+// Class components: components that identify a kind of entity
+struct Player : public Component { };
+// Data components: components that hold data
 struct Health : public Component
 {
 	int health = 0;

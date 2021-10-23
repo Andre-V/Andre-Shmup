@@ -2,25 +2,12 @@
 #include <SDL.h>
 #include "EntityManager.h"
 #include "SystemManager.h"
+#include "GameInfo.h"
 
 class EntityManager;
 class SystemManager;
 
-struct GameInfo
-{
-	const int SCREEN_WIDTH;
-	const int SCREEN_HEIGHT;
-	const char* WINDOW_TITLE;
-	SDL_Window* sdlWindow;
-	SDL_Renderer* sdlRenderer;
 
-	GameInfo(const int width, const int height, const char* title)
-		: SCREEN_WIDTH(width), SCREEN_HEIGHT(height), WINDOW_TITLE(title),
-		sdlWindow(nullptr), sdlRenderer(nullptr)
-	{
-
-	}
-};
 
 class Game
 {
@@ -33,10 +20,13 @@ private:
 
 	SDL_Window* _sdlWindow;
 	SDL_Renderer* _sdlRenderer;
+	SDL_Event _e;
+
+	bool _running;
 public:
 	Game(const int width, const int height, const char* title = "")
 		: _entityManager(), _systemManager(), _entitySource(_entityManager),
-		_gameInfo(width, height, title)
+		_gameInfo(width, height, title), _e(), _running(true)
 	{
 		_sdlWindow = SDL_CreateWindow(_gameInfo.WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			_gameInfo.SCREEN_WIDTH, _gameInfo.SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -47,18 +37,28 @@ public:
 	}
 	void update()
 	{
+		while (SDL_PollEvent(&_e) != 0)
+		{
+			if (_e.type == SDL_QUIT) { _running = false; }
+			else //if (_e.type == SDL_KEYDOWN)
+			{
+				_gameInfo.sdlEvents.push_back(_e);
+			}
+		}
 		_entityManager.update();
 		_systemManager.update();
 		SDL_RenderPresent(_sdlRenderer);
 		SDL_RenderClear(_sdlRenderer);
+		_gameInfo.sdlEvents = {};
 	}
 	bool isRunning()
 	{
-		return true;
+		return _running;
 	}
 	void addSystem(System* system, int priority = 0)
 	{
 		system->entitySource = &_entitySource;
+		system->gameInfo = &_gameInfo;
 		_systemManager.addSystem(system, priority);
 	}
 	EntityRequests& enttReq()
