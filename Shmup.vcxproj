@@ -154,6 +154,8 @@
     <ClInclude Include="IEntityRequests.h" />
     <ClInclude Include="linalg.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>

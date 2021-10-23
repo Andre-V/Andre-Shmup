@@ -66,6 +66,12 @@
     <ClInclude Include="EntityFactory.h">
       <Filter>Header Files\ECS\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Header Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemManager.h">
+      <Filter>Header Files\ECS\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

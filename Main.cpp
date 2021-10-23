@@ -7,10 +7,10 @@
 int main(int argc, char* args[])
 {
 	Entity* e = new Entity;
-	//Game game;
-	//while (game.isRunning())
-	//{
-	//	game.update();
-	//}
+	Game game(1280, 720, "Shmup");
+	while (game.isRunning())
+	{
+		game.update();
+	}
 	return 0;
 }

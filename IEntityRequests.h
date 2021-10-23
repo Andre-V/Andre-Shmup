@@ -16,6 +16,11 @@ public:
 	{
 
 	}
+	EntityRequests(EntityManager& entityManager) :
+		EntityRequests(shared_ptr<EntityManager>(&entityManager))
+	{
+
+	}
 	template<typename T, typename... TRest>
 	list<shared_ptr<Entity>> get()
 	{
