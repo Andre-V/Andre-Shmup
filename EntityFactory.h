@@ -12,9 +12,19 @@ public:
 	{
 		return *(new Entity);
 	}
-	
+	template<typename E, typename... ERest>
+	Entity& make(ERest...)
+	{
+		return this->make<E>();
+	}
+
 	template<>
 	Entity& make<Something>()
+	{
+
+	}
+	template<>
+	Entity& make<Player,int,int>(int t, int t2)
 	{
 
 	}

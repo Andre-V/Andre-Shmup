@@ -10,7 +10,7 @@ using namespace aliases;
 
 struct Health : public Component
 {
-	int health;
+	int health = 0;
 };
 struct Position : public Component
 {
@@ -20,13 +20,12 @@ struct Velocity : public Component
 {
 	float2 velocity;
 };
-struct HitBox : public Component
+struct Dimensions : public Component
 {
-	float w;
-	float h;
+	float w = 0, h = 0;
 };
 struct TextureBox : public Component
 {
-	//Rect rect;
+	//float w, h;
 	Texture texture;
 };

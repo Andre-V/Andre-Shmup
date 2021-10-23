@@ -11,8 +11,9 @@ void init(Game& game)
 	Entity& entity = game.enttReq().make<Player>();
 	entity.add<Position>().position = float2{ 500, 500 };
 	entity.add<Velocity>().velocity = float2{ 0, 0 };
-	TextureBox& textureBox = entity.add<TextureBox>();
-	textureBox.texture.renderer = game.info().sdlRenderer;
+	entity.add<Dimensions>().w = 50;
+	entity.get<Dimensions>().h = 50;
+	entity.add<TextureBox>().texture.renderer = game.info().sdlRenderer;
 	entity.get<TextureBox>().texture.load("textures/test.png");
 	
 	game.addSystem(new SysRender, 1);

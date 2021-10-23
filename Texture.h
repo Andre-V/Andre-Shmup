@@ -55,4 +55,8 @@ public:
 	{
 		this->render(rect.sdlRect());
 	}
+	void render(float x, float y, float w, float h)
+	{
+		this->render({ (int)x, (int)y, (int)w, (int)h });
+	}
 };
