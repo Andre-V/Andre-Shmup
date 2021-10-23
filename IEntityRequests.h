@@ -16,9 +16,22 @@ public:
 	{
 
 	}
-	template<typename T>
+	template<typename T, typename... TRest>
 	list<shared_ptr<Entity>> get()
 	{
-		//return _entityManager.get<
+		return (*_entityManager).get<T, TRest...>();
+	}
+	template<typename E>
+	Entity& make()
+	{
+		return (*_entityManager).make<E>();
+	}
+	void remove(Entity& entity)
+	{
+		(*_entityManager).remove(entity);
+	}
+	void remove(shared_ptr<Entity> entity)
+	{
+		(*_entityManager).remove(entity);
 	}
 };
