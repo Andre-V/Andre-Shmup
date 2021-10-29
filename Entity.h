@@ -18,7 +18,7 @@ private:
 	}
 	void checkCapacity(size_t index)
 	{
-		if (index >= _components.capacity())
+		if (index >= _components.size())
 		{
 			resize(index + 1);
 		}
