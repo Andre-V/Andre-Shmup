@@ -1,11 +1,11 @@
 #pragma once
-#include "IEntityRequests.h"
+#include "EntityManager.h"
 #include "GameInfo.h"
 
 class System
 {
 public:
-	EntityRequests* entitySource;
+	EntityManager* entitySource;
 	GameInfo* gameInfo;
 	int priority;
 	virtual void update() { }

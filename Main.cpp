@@ -8,7 +8,7 @@
 
 void init(Game& game)
 {
-	Entity& entity = game.enttReq().make<Player>();
+	Entity& entity = game.enttMngr().make<Player>();
 	entity.add<Player>();
 	entity.add<Position>().position = float2{ 500, 500 };
 	entity.add<Velocity>().velocity = float2{ 0, 0 };

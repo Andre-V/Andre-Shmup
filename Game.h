@@ -14,7 +14,6 @@ class Game
 private:
 	EntityManager _entityManager;
 	SystemManager _systemManager;
-	EntityRequests _entitySource;
 	
 	GameInfo _gameInfo;
 
@@ -25,15 +24,20 @@ private:
 	bool _running;
 public:
 	Game(const int width, const int height, const char* title = "")
-		: _entityManager(), _systemManager(), _entitySource(_entityManager),
+		: _entityManager(), _systemManager(),
 		_gameInfo(width, height, title), _e(), _running(true)
 	{
 		_sdlWindow = SDL_CreateWindow(_gameInfo.WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			_gameInfo.SCREEN_WIDTH, _gameInfo.SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
 		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
 		SDL_SetRenderDrawColor(_sdlRenderer, 0x00, 0x00, 0x00, 0x00);
+
 		_gameInfo.sdlWindow = _sdlWindow;
+
 		_gameInfo.sdlRenderer = _sdlRenderer;
+
 	}
 	void update()
 	{
@@ -57,13 +61,13 @@ public:
 	}
 	void addSystem(System* system, int priority = 0)
 	{
-		system->entitySource = &_entitySource;
+		system->entitySource = &_entityManager;
 		system->gameInfo = &_gameInfo;
 		_systemManager.addSystem(system, priority);
 	}
-	EntityRequests& enttReq()
+	EntityManager& enttMngr()
 	{
-		return _entitySource;
+		return _entityManager;
 	}
 	GameInfo& info()
 	{

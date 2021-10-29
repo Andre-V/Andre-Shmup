@@ -78,6 +78,9 @@
     <ClInclude Include="GameInfo.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="EntityInterfaces.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

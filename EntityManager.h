@@ -3,17 +3,22 @@
 #include <list>
 #include <queue>
 #include "Entity.h"
+#include "EntityInterfaces.h"
 #include "EntityFactory.h"
 
 using namespace std;
 
-class EntityManager
+class EntityManager : IEntityInsert
 {
 private:
-	EntityFactory entityFactory;
 	list<shared_ptr<Entity>> _entities;
 	queue<shared_ptr<Entity>> _newEntities;
 public:
+	EntityFactory entityFactory;
+	EntityManager() : entityFactory(*this)
+	{
+
+	}
 	// return entities matching desired components
 	template<typename T, typename... TRest>
 	list<shared_ptr<Entity>> get()
@@ -32,7 +37,7 @@ public:
 	Entity& make()
 	{
 		Entity& entity = entityFactory.make<E>();
-		_newEntities.push(shared_ptr<Entity>(&entity));
+		//_newEntities.push(shared_ptr<Entity>(&entity));
 		return entity;
 	}
 	void update()
@@ -55,6 +60,10 @@ public:
 			_entities.push_back(_newEntities.front());
 			_newEntities.pop();
 		}
+	}
+	void insert(Entity& entity)
+	{
+		_newEntities.push(shared_ptr<Entity>(&entity));
 	}
 	void remove(Entity& entity)
 	{

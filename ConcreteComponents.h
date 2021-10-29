@@ -32,3 +32,7 @@ struct TextureBox : public Component
 	//float w, h;
 	Texture texture;
 };
+struct Spawner : public Component
+{
+	float2* origin;
+};

@@ -17,6 +17,7 @@ public:
 			float2& vel = entity->get<Velocity>().velocity;
 			const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 
+			// TO DO: Use key-mapping to make this prettier
 			if (!(keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN]
 				|| keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S]))
 			{
@@ -125,5 +126,14 @@ public:
 			Dimensions& dim = entity->get<Dimensions>();
 			entity->get<TextureBox>().texture.render(pos.x - (dim.w/2), pos.y - (dim.h/2), dim.w, dim.h);
 		}
+	}
+};
+
+class SysSpawn : public System
+{
+public:
+	void update() override
+	{
+
 	}
 };

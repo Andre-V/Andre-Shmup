@@ -6,6 +6,9 @@
 using namespace std;
 // Stuff Systems are allowed to use to interact with entities
 // I would've used interfaces but virtual templates don't let me
+
+// IT'S GETTING ANNOYING USING THIS SO I REMOVED IT.
+/*
 class EntityRequests
 {
 private:
@@ -31,6 +34,11 @@ public:
 	{
 		return (*_entityManager).make<E>();
 	}
+	template<typename E, typename... ERest>
+	Entity& make(ERest...)
+	{
+		return (*_entityManager).make<E>(ERest...);
+	}
 	void remove(Entity& entity)
 	{
 		(*_entityManager).remove(entity);
@@ -39,4 +47,8 @@ public:
 	{
 		(*_entityManager).remove(entity);
 	}
-};
+	EntityFactory& getFactory()
+	{
+		return (*_entityManager).entityFactory;
+	}
+};*/
