@@ -33,6 +33,10 @@ public:
 		}
 		return matchingEntities;
 	}
+	list<shared_ptr<Entity>> get()
+	{
+		return _entities;
+	}
 	template<typename E>
 	Entity& make()
 	{

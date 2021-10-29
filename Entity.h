@@ -31,7 +31,20 @@ public:
 		_key(CmpMngr::size()),
 		active(true)
 	{
-
+		
+	}
+	
+	Entity(const Entity& entity) 
+		: _components(entity._components.size()), _key(entity._key), active(entity.active)
+	{
+		for (int i = 0; i < entity._components.size(); i++)
+		{
+			if (entity._components[i] != nullptr)
+			{
+				_components[i] = shared_ptr<Component>(entity._components[i]->clone());
+			}
+			
+		}
 	}
 	
 	template<typename T, typename T2, typename... TRest> 

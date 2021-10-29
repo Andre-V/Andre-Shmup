@@ -85,11 +85,12 @@ namespace ShmupTests
 	};
 	TEST_CLASS(EntityFactoryTests)
 	{
+		/*
 		TEST_METHOD(TestJustMake)
 		{
 			EntityFactory ef;
 			Entity& e = ef.make<dummy1>();
-		}
+		}*/
 	};
 	TEST_CLASS(EntityManagerTests)
 	{

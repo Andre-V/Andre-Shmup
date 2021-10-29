@@ -38,6 +38,8 @@ public:
 
 		_gameInfo.sdlRenderer = _sdlRenderer;
 
+		_entityManager.entityFactory.setRenderer(_sdlRenderer);
+
 	}
 	void update()
 	{

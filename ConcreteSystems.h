@@ -40,7 +40,14 @@ public:
 				if (keystate[SDL_SCANCODE_RIGHT]
 					|| keystate[SDL_SCANCODE_D]) { vel.x = 1; }
 			}
-
+			if (keystate[SDL_SCANCODE_SPACE])
+			{
+				entity->get<Ship>().shoot = true;
+			}
+			else
+			{
+				entity->get<Ship>().shoot = false;
+			}
 			/*
 			for (auto& input : gameInfo->sdlEvents)
 			{
@@ -129,11 +136,85 @@ public:
 	}
 };
 
-class SysSpawn : public System
+class SysShipShoot : public System
 {
 public:
 	void update() override
 	{
+		
+		Entities entities = entitySource->get<Ship, Spawner>();
+		for (auto& entity : entities)
+		{
+			Spawner& spawner = entity->get<Spawner>();
+			if (entity->get<Ship>().shoot)
+			{
+				spawner.active = true;
+				// Spawn valid entities by adding position component
+				for (Entity* spawnable : spawner.validEntities)
+				{
+					if (spawner.origin != nullptr)
+					{
+						spawnable->add<Position>().position = *(spawner.origin);
+					}
+				}
+			}
+			else
+			{
+				spawner.active = false;
+			}
 
+		}
+	}
+};
+class SysUpdateSpawners : public System
+{
+public:
+	// Updates each spawners validEntites list.
+	void update() override
+	{
+		Entities entities = entitySource->get<Spawner>();
+		for (auto& entity : entities)
+		{
+			Spawner& spawner = entity->get<Spawner>();
+
+			// Check if spawner is even active
+			if (spawner.active)
+			{
+				// Get next item(s) in sequence based on ticks
+				// Then, add them to validEntities
+				list<Entity*> validEntities;
+				// Keep deqeuing until spawner ticks != front pair ticks
+				pair<Entity*, int> front = spawner.sequence.front();
+				while (front.second == spawner.ticks)
+				{
+					cout << "shoot" << endl;
+					Entity* copy = new Entity(*(front.first));
+					entitySource->insert(*copy);
+					auto& dim = copy->get<Dimensions>();
+					auto& texture = copy->get<TextureBox>();
+					auto& dim2 = front.first->get<Dimensions>();
+					auto& texture2 = front.first->get<TextureBox>();
+					validEntities.push_back(copy);
+
+					spawner.sequence.pop();
+					// Reset ticks
+					spawner.ticks = 0;
+
+					// Put back into queue if spawner loops
+					if (spawner.loop)
+					{
+						spawner.sequence.push(front);
+					}
+
+					front = spawner.sequence.front();
+				}
+				spawner.validEntities = validEntities;
+				spawner.ticks++;
+			}
+			else
+			{
+				spawner.ticks = 0;
+			}
+		}
 	}
 };

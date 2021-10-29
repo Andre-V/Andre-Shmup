@@ -20,5 +20,7 @@ typedef CompManager CmpMngr;
 struct Component
 {
 private:
+
 public:
+	virtual Component* clone() { return new Component(); }
 };
