@@ -61,11 +61,11 @@ public:
 	{
 		return _running;
 	}
-	void addSystem(System* system, int priority = 0)
+	void addSystem(System* system)
 	{
 		system->entitySource = &_entityManager;
 		system->gameInfo = &_gameInfo;
-		_systemManager.addSystem(system, priority);
+		_systemManager.add(system);
 	}
 	EntityManager& enttMngr()
 	{

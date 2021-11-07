@@ -8,11 +8,10 @@ using namespace std;
 class SystemManager
 {
 public:
-	multiset<unique_ptr<System>,SystemCompare> systems;
-	void addSystem(System* system, int priority = 0)
+	vector<unique_ptr<System>> systems;
+	void add(System* system)
 	{
-		system->priority = priority;
-		systems.insert(unique_ptr<System>(system));
+		systems.push_back(unique_ptr<System>(system));
 	}
 	void update()
 	{
