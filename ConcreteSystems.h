@@ -161,36 +161,65 @@ public:
 		{
 			Spawner& spawner = entity->get<Spawner>();
 
-			// Check if spawner is even active
-			if (spawner.active)
+			// Check if there's entities left to spawn
+			if (spawner.index < spawner.sequence.size())
 			{
-				list<Entity*> toSpawn;
-				// Keep "deqeuing" until spawner ticks != front pair ticks
-				pair<Entity*, int> next;
-				while ((next = spawner.sequence[spawner.index]).second == spawner.ticks)
+				// Check if spawner is even active and
+				if (spawner.active)
 				{
-
-					// Clone entity
-					Entity* copy = new Entity(*next.first);
-					entitySource->insert(*copy);
-
-					// Spawn entity by giving it a position
-					if (spawner.origin != nullptr)
+					// Keep "deqeuing" until spawner ticks != front pair ticks
+					pair<Entity*, int> next;
+					while ((next = spawner.sequence[spawner.index]).second == spawner.ticks)
 					{
-						copy->add<Position>().position = *(spawner.origin);
-					}
+						// Clone entity
+						Entity* copy = new Entity(*next.first);
+						entitySource->insert(*copy);
 
-					// Update other spawner data
-					spawner.ticks = 0;
-					spawner.index = (spawner.index + 1) % spawner.sequence.size();
+						// Spawn entity by giving it a position (if it doesn't already)
+						if (spawner.origin != nullptr)
+						{
+							copy->add<Position>().position = *(spawner.origin);
+						}
+
+						// Update other spawner data
+						spawner.ticks = 0;
+						spawner.index++;
+  						if (spawner.loop)
+						{
+							spawner.index %= spawner.sequence.size();
+						}
+						else
+						{
+							if (spawner.index >= spawner.sequence.size())
+							{
+								break;
+							}
+						}
+					
+					}
+					spawner.ticks++;
 				}
-				spawner.ticks++;
+				// else, reset spawner
+				else
+				{
+					spawner.index = 0;
+					spawner.ticks = 0;
+				}
 			}
-			// else, reset spawner
-			else
+		}
+	}
+};
+
+class SysDestoryOutOfBounds : public System
+{
+	void update() override
+	{
+		Entities entities = entitySource->get<Bullet, Position>();
+		for (auto& entity : entities)
+		{
+			if (entity->get<Position>().position.y < 0)
 			{
-				spawner.index = 0;
-				spawner.ticks = 0;
+				entity->active = false;
 			}
 		}
 	}
