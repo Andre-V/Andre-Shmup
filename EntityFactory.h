@@ -115,7 +115,7 @@ public:
 	{
 		Entity& entity = make();
 		entity.active = false;
-		entity.add<Bullet>().attack = 1;
+		entity.add<Bullet>().damage = 1;
 		entity.add<Dimensions>().w = 20;
 		entity.get<Dimensions>().h = 20;
 		entity.add<Velocity>().velocity = float2{ 0, -5 };
@@ -128,7 +128,7 @@ public:
 	{
 		Entity& entity = make();
 		entity.add<Spawner>();
-		entity.get<Spawner>().loop = false;
+		entity.get<Spawner>().loop = true;
 		return entity;
 	}
 };

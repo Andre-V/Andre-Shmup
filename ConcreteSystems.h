@@ -217,6 +217,7 @@ public:
 
 class SysBulletCollisions : public System
 {
+	// TODO: Use hitboxes instead
 	void update() override
 	{
 		Entities bullets = entitySource->get<Bullet, Position, Dimensions>();
@@ -229,20 +230,38 @@ class SysBulletCollisions : public System
 				float2& ePos = enemy->get<Position>().position;
 				Dimensions& bDim = bullet->get<Dimensions>();
 				Dimensions& eDim = enemy->get<Dimensions>();
+
+				SDL_Rect&& rect = { (int)(bPos.x - (bDim.w / 2)), (int)(bPos.y - (bDim.h / 2)), (int)bDim.w, (int)bDim.h };
+				SDL_Rect&& rect2 = { (int)(ePos.x - (eDim.w / 2)), (int)(ePos.y - (eDim.h / 2)), (int)eDim.w, (int)eDim.h };
 				// Box v Box collision
-				if ( bPos.x <= ePos.x + eDim.w && bPos.x + bDim.w >= ePos.x &&
-					bPos.y <= ePos.y + eDim.h && bPos.y + bDim.h >= ePos.y
+
+				if ( SDL_HasIntersection(&rect,&rect2)
 				)
 				{
 					bullet->exists = false;
-					enemy->get<Health>().health -= bullet->get<Bullet>().attack;
+					enemy->get<Health>().health -= bullet->get<Bullet>().damage;
 				}
 			}
 		}
 	}
 };
 
-class SysDestoryOutOfBounds : public System
+class SysDestroyNoHealth : public System
+{
+	void update() override
+	{
+		Entities entities = entitySource->get<Health>();
+		for (auto& entity : entities)
+		{
+			if (entity->get<Health>().health <= 0)
+			{
+				entity->exists = false;
+			}
+		}
+	}
+};
+
+class SysDestroyOutOfBounds : public System
 {
 	void update() override
 	{

@@ -17,12 +17,13 @@ struct Ship : public Component
 struct Player : public Component { };
 struct Bullet : public Component 
 { 
-	int attack = 0;
+	float damage = 0;
+	Bullet* clone() { return new Bullet(*this); }
 };
 // Data components: components that hold data
 struct Health : public Component
 {
-	int health = 0;
+	float health = 0;
 	Health* clone() { return new Health(*this); }
 };
 struct Position : public Component
