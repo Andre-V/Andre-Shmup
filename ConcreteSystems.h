@@ -6,6 +6,12 @@
 
 typedef list<shared_ptr<Entity>> Entities;
 
+SDL_Rect toRect(const float2& position, const Dimensions& dimensions)
+{
+	return { (int)(position.x - (dimensions.w / 2)), 
+		(int)(position.y - (dimensions.h / 2)), (int)dimensions.w, (int)dimensions.h };
+}
+
 class SysPlayerInput : public System
 {
 public:
@@ -131,7 +137,7 @@ public:
 		{
 			float2& pos = entity->get<Position>().position;
 			Dimensions& dim = entity->get<Dimensions>();
-			entity->get<TextureBox>().texture.render(pos.x - (dim.w/2), pos.y - (dim.h/2), dim.w, dim.h);
+			entity->get<TextureBox>().texture.render(toRect(pos, dim));
 		}
 	}
 };
@@ -231,12 +237,11 @@ class SysBulletCollisions : public System
 				Dimensions& bDim = bullet->get<Dimensions>();
 				Dimensions& eDim = enemy->get<Dimensions>();
 
-				SDL_Rect&& rect = { (int)(bPos.x - (bDim.w / 2)), (int)(bPos.y - (bDim.h / 2)), (int)bDim.w, (int)bDim.h };
-				SDL_Rect&& rect2 = { (int)(ePos.x - (eDim.w / 2)), (int)(ePos.y - (eDim.h / 2)), (int)eDim.w, (int)eDim.h };
-				// Box v Box collision
+				SDL_Rect&& rect = toRect(bPos, bDim);
+				SDL_Rect&& rect2 = toRect(ePos, eDim);
 
-				if ( SDL_HasIntersection(&rect,&rect2)
-				)
+				// Box v Box collision
+				if (SDL_HasIntersection(&rect,&rect2))
 				{
 					bullet->exists = false;
 					enemy->get<Health>().health -= bullet->get<Bullet>().damage;
