@@ -54,17 +54,20 @@ public:
 		entity.add<Player>();
 		entity.add<Ship>();
 		entity.add<Spawner>();
-
 		entity.add<Position>().position = float2{ 500, 500 };
 		entity.add<Velocity>().velocity = float2{ 0, 0 };
 		entity.add<Dimensions>().w = 50;
+
 		entity.get<Dimensions>().h = 50;
+
 		entity.add<TextureBox>().texture.renderer = _renderer;
 		entity.get<TextureBox>().texture.load("textures/test.png");
+
+		entity.get<Spawner>().active = false;
 		entity.get<Spawner>().origin = &entity.get<Position>().position;
 		entity.get<Spawner>().ticks = 50;
-		entity.get<Spawner>().sequence.push({ &make<GenericBullet>(), 0 });
-		entity.get<Spawner>().sequence.push({ &make<GenericBullet>(), 10 });
+		entity.get<Spawner>().sequence.push_back({ &make<GenericBullet>(), 0 });
+		entity.get<Spawner>().sequence.push_back({ &make<GenericBullet>(), 10 });
 		return entity;
 	}
 	template<>

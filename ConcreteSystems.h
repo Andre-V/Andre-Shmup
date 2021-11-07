@@ -146,23 +146,7 @@ public:
 		for (auto& entity : entities)
 		{
 			Spawner& spawner = entity->get<Spawner>();
-			if (entity->get<Ship>().shoot)
-			{
-				spawner.active = true;
-				// Spawn valid entities by adding position component
-				for (Entity* spawnable : spawner.validEntities)
-				{
-					if (spawner.origin != nullptr)
-					{
-						spawnable->add<Position>().position = *(spawner.origin);
-					}
-				}
-			}
-			else
-			{
-				spawner.active = false;
-			}
-
+			spawner.active = entity->get<Ship>().shoot;
 		}
 	}
 };
@@ -180,39 +164,32 @@ public:
 			// Check if spawner is even active
 			if (spawner.active)
 			{
-				// Get next item(s) in sequence based on ticks
-				// Then, add them to validEntities
-				list<Entity*> validEntities;
-				// Keep deqeuing until spawner ticks != front pair ticks
-				pair<Entity*, int> front = spawner.sequence.front();
-				while (front.second == spawner.ticks)
+				list<Entity*> toSpawn;
+				// Keep "deqeuing" until spawner ticks != front pair ticks
+				pair<Entity*, int> next;
+				while ((next = spawner.sequence[spawner.index]).second == spawner.ticks)
 				{
-					cout << "shoot" << endl;
-					Entity* copy = new Entity(*(front.first));
+
+					// Clone entity
+					Entity* copy = new Entity(*next.first);
 					entitySource->insert(*copy);
-					auto& dim = copy->get<Dimensions>();
-					auto& texture = copy->get<TextureBox>();
-					auto& dim2 = front.first->get<Dimensions>();
-					auto& texture2 = front.first->get<TextureBox>();
-					validEntities.push_back(copy);
 
-					spawner.sequence.pop();
-					// Reset ticks
-					spawner.ticks = 0;
-
-					// Put back into queue if spawner loops
-					if (spawner.loop)
+					// Spawn entity by giving it a position
+					if (spawner.origin != nullptr)
 					{
-						spawner.sequence.push(front);
+						copy->add<Position>().position = *(spawner.origin);
 					}
 
-					front = spawner.sequence.front();
+					// Update other spawner data
+					spawner.ticks = 0;
+					spawner.index = (spawner.index + 1) % spawner.sequence.size();
 				}
-				spawner.validEntities = validEntities;
 				spawner.ticks++;
 			}
+			// else, reset spawner
 			else
 			{
+				spawner.index = 0;
 				spawner.ticks = 0;
 			}
 		}

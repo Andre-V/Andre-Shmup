@@ -44,11 +44,11 @@ struct TextureBox : public Component
 };
 struct Spawner : public Component
 {
-	queue<pair<Entity*, int>> sequence;
+	vector<pair<Entity*, int>> sequence;
 	float2* origin = nullptr;
+	int index = 0;
 	int ticks = 0;
 	bool active = true;
 	bool loop = true;
-	list<Entity*> validEntities;
 	Spawner* clone() { return new Spawner(*this); }
 };
