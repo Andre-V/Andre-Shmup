@@ -15,6 +15,10 @@ struct Ship : public Component
 	Ship* clone() { return new Ship(*this); }
 };
 struct Player : public Component { };
+struct Bullet : public Component 
+{ 
+	int attack = 0;
+};
 // Data components: components that hold data
 struct Health : public Component
 {
@@ -45,10 +49,22 @@ struct TextureBox : public Component
 struct Spawner : public Component
 {
 	vector<pair<Entity*, int>> sequence;
-	float2* origin = nullptr;
+	vector<float2> offsets;
+	shared_ptr<float2> origin = shared_ptr<float2>(new float2{ 0,0 });
 	int index = 0;
 	int ticks = 0;
 	bool active = true;
 	bool loop = true;
+
+	void add(Entity* entity, int ticks)
+	{
+		entity->active = false;
+		sequence.push_back({ entity, ticks });
+	}
+	void add(Entity* entity, int ticks, float2 offset)
+	{
+		this->add(entity, ticks);
+		offsets.push_back(offset);
+	}
 	Spawner* clone() { return new Spawner(*this); }
 };

@@ -26,7 +26,7 @@ public:
 		list<shared_ptr<Entity>> matchingEntities;
 		for (shared_ptr<Entity> entity : _entities)
 		{
-			if ((*entity).has<T, TRest...>())
+			if ((*entity).has<T, TRest...>() && (*entity).active)
 			{
 				matchingEntities.push_back(entity);
 			}
@@ -37,6 +37,18 @@ public:
 	{
 		return _entities;
 	}
+	template<typename T, typename... TRest>
+	shared_ptr<Entity> getSingle()
+	{
+		for (shared_ptr<Entity> entity : _entities)
+		{
+			if ((*entity).has<T, TRest...>())
+			{
+				return entity;
+			}
+		}
+		return nullptr;
+	}
 	template<typename E>
 	Entity& make()
 	{
@@ -46,10 +58,10 @@ public:
 	}
 	void update()
 	{
-		// remove entities flagged as inactive
+		// remove entities flagged as noexistant
 		for (auto iter = _entities.begin(); iter != _entities.end();)
 		{
-			if (!(**iter).active)
+			if (!(**iter).exists)
 			{
 				iter = _entities.erase(iter);
 			}
@@ -71,7 +83,7 @@ public:
 	}
 	void remove(Entity& entity)
 	{
-		entity.active = false;
+		entity.exists = false;
 	}
 	void remove(shared_ptr<Entity> entity)
 	{

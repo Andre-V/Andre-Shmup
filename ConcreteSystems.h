@@ -25,8 +25,8 @@ public:
 			}
 			else
 			{
-				if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W]) { vel.y = -1; }
-				if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S]) { vel.y = 1; }
+				if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W]) { vel.y = -2; }
+				if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S]) { vel.y = 2; }
 			}
 			if (!(keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]
 				|| keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D]))
@@ -36,9 +36,9 @@ public:
 			else
 			{
 				if (keystate[SDL_SCANCODE_LEFT]
-					|| keystate[SDL_SCANCODE_A]) { vel.x = -1; }
+					|| keystate[SDL_SCANCODE_A]) { vel.x = -2; }
 				if (keystate[SDL_SCANCODE_RIGHT]
-					|| keystate[SDL_SCANCODE_D]) { vel.x = 1; }
+					|| keystate[SDL_SCANCODE_D]) { vel.x = 2; }
 			}
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
@@ -173,12 +173,17 @@ public:
 					{
 						// Clone entity
 						Entity* copy = new Entity(*next.first);
+						copy->active = true;
 						entitySource->insert(*copy);
 
-						// Spawn entity by giving it a position (if it doesn't already)
-						if (spawner.origin != nullptr)
+						// Spawn entity relative to origin ((0,0) by default).
+						if (copy->has<Position>())
 						{
-							copy->add<Position>().position = *(spawner.origin);
+							copy->get<Position>().position += *spawner.origin;
+						}
+						else
+						{
+							copy->add<Position>().position = *spawner.origin;
 						}
 
 						// Update other spawner data
@@ -210,6 +215,33 @@ public:
 	}
 };
 
+class SysBulletCollisions : public System
+{
+	void update() override
+	{
+		Entities bullets = entitySource->get<Bullet, Position, Dimensions>();
+		Entities enemies = entitySource->get<Ship, Health, Position, Dimensions>();
+		for (auto& bullet : bullets)
+		{
+			for (auto& enemy : enemies)
+			{
+				float2& bPos = bullet->get<Position>().position;
+				float2& ePos = enemy->get<Position>().position;
+				Dimensions& bDim = bullet->get<Dimensions>();
+				Dimensions& eDim = enemy->get<Dimensions>();
+				// Box v Box collision
+				if ( bPos.x <= ePos.x + eDim.w && bPos.x + bDim.w >= ePos.x &&
+					bPos.y <= ePos.y + eDim.h && bPos.y + bDim.h >= ePos.y
+				)
+				{
+					bullet->exists = false;
+					enemy->get<Health>().health -= bullet->get<Bullet>().attack;
+				}
+			}
+		}
+	}
+};
+
 class SysDestoryOutOfBounds : public System
 {
 	void update() override
@@ -219,7 +251,7 @@ class SysDestoryOutOfBounds : public System
 		{
 			if (entity->get<Position>().position.y < 0)
 			{
-				entity->active = false;
+				entity->exists = false;
 			}
 		}
 	}

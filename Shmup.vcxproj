@@ -152,9 +152,11 @@
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityInterfaces.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FileLoadFactory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="IEntityRequests.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="linalg.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="System.h" />

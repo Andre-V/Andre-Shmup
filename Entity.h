@@ -24,18 +24,18 @@ private:
 		}
 	}
 public:
-	bool active;
+	bool active; bool exists;
 
 	Entity() : 
 		_components(CmpMngr::size()),
 		_key(CmpMngr::size()),
-		active(true)
+		active(true), exists(true)
 	{
 		
 	}
 	
 	Entity(const Entity& entity) 
-		: _components(entity._components.size()), _key(entity._key), active(entity.active)
+		: _components(entity._components.size()), _key(entity._key), active(entity.active), exists(entity.exists)
 	{
 		for (int i = 0; i < entity._components.size(); i++)
 		{

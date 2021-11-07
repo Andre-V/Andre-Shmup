@@ -34,6 +34,9 @@
     <Filter Include="Header Files\Linalg">
       <UniqueIdentifier>{e6553875-8386-46c2-8987-603a9738aca4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Json">
+      <UniqueIdentifier>{ee14c9de-4329-48e8-aa1b-ccc05470a0a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -80,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="EntityInterfaces.h">
       <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLoadFactory.h">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
