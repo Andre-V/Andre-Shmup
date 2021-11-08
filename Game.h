@@ -9,36 +9,26 @@ class SystemManager;
 
 
 
-class Game
+class Game : public GameInfo
 {
 private:
 	EntityManager _entityManager;
 	SystemManager _systemManager;
-	
-	GameInfo _gameInfo;
-
-	SDL_Window* _sdlWindow;
-	SDL_Renderer* _sdlRenderer;
 	SDL_Event _e;
-
 	bool _running;
 public:
 	Game(const int width, const int height, const char* title = "")
-		: _entityManager(), _systemManager(),
-		_gameInfo(width, height, title), _e(), _running(true)
+		: GameInfo(width, height, title),
+		_entityManager(), _systemManager(), _e(), _running(true)
 	{
-		_sdlWindow = SDL_CreateWindow(_gameInfo.WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			_gameInfo.SCREEN_WIDTH, _gameInfo.SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		sdlWindow = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
-		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-		SDL_SetRenderDrawColor(_sdlRenderer, 0x00, 0x00, 0x00, 0x00);
+		SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0x00);
 
-		_gameInfo.sdlWindow = _sdlWindow;
-
-		_gameInfo.sdlRenderer = _sdlRenderer;
-
-		EntityFactory::renderer = _sdlRenderer;
+		EntityFactory::renderer = sdlRenderer;
 
 	}
 	void update()
@@ -46,16 +36,16 @@ public:
 		while (SDL_PollEvent(&_e) != 0)
 		{
 			if (_e.type == SDL_QUIT) { _running = false; }
-			else //if (_e.type == SDL_KEYDOWN)
+			else
 			{
-				_gameInfo.sdlEvents.push_back(_e);
+				sdlEvents.push_back(_e);
 			}
 		}
 		_entityManager.update();
 		_systemManager.update();
-		SDL_RenderPresent(_sdlRenderer);
-		SDL_RenderClear(_sdlRenderer);
-		_gameInfo.sdlEvents = {};
+		SDL_RenderPresent(sdlRenderer);
+		SDL_RenderClear(sdlRenderer);
+		sdlEvents.clear();
 	}
 	bool isRunning()
 	{
@@ -64,7 +54,7 @@ public:
 	void addSystem(System* system)
 	{
 		system->entitySource = &_entityManager;
-		system->gameInfo = &_gameInfo;
+		system->gameInfo = this;
 		_systemManager.add(system);
 	}
 	EntityManager& enttMngr()
@@ -73,7 +63,7 @@ public:
 	}
 	GameInfo& info()
 	{
-		return _gameInfo;
+		return *this;
 	}
 };
 
