@@ -38,7 +38,7 @@ public:
 
 		_gameInfo.sdlRenderer = _sdlRenderer;
 
-		_entityManager.entityFactory.setRenderer(_sdlRenderer);
+		EntityFactory::renderer = _sdlRenderer;
 
 	}
 	void update()

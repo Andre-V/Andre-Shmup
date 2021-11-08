@@ -14,11 +14,6 @@ private:
 	list<shared_ptr<Entity>> _entities;
 	queue<shared_ptr<Entity>> _newEntities;
 public:
-	EntityFactory entityFactory;
-	EntityManager() : entityFactory(*this)
-	{
-
-	}
 	// return entities matching desired components
 	template<typename T, typename... TRest>
 	list<shared_ptr<Entity>> get()
@@ -49,19 +44,12 @@ public:
 		}
 		return nullptr;
 	}
-	template<typename E>
-	Entity& make()
-	{
-		Entity& entity = entityFactory.make<E>();
-		//_newEntities.push(shared_ptr<Entity>(&entity));
-		return entity;
-	}
 	void update()
 	{
-		// remove entities flagged as noexistant
+		// remove entities flagged as inactive
 		for (auto iter = _entities.begin(); iter != _entities.end();)
 		{
-			if (!(**iter).exists)
+			if (!(**iter).active)
 			{
 				iter = _entities.erase(iter);
 			}
@@ -83,7 +71,7 @@ public:
 	}
 	void remove(Entity& entity)
 	{
-		entity.exists = false;
+		entity.active = false;
 	}
 	void remove(shared_ptr<Entity> entity)
 	{

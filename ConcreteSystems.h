@@ -243,7 +243,7 @@ class SysBulletCollisions : public System
 				// Box v Box collision
 				if (SDL_HasIntersection(&rect,&rect2))
 				{
-					bullet->exists = false;
+					bullet->active = false;
 					enemy->get<Health>().health -= bullet->get<Bullet>().damage;
 				}
 			}
@@ -260,7 +260,7 @@ class SysDestroyNoHealth : public System
 		{
 			if (entity->get<Health>().health <= 0)
 			{
-				entity->exists = false;
+				entity->active = false;
 			}
 		}
 	}
@@ -275,7 +275,7 @@ class SysDestroyOutOfBounds : public System
 		{
 			if (entity->get<Position>().position.y < 0)
 			{
-				entity->exists = false;
+				entity->active = false;
 			}
 		}
 	}
