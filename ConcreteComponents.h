@@ -15,6 +15,13 @@ struct Ship : public Component
 	Ship* clone() { return new Ship(*this); }
 };
 struct Player : public Component { };
+struct AIShip : public Component 
+{
+	int state = 0;
+	bool flipped = false;
+	int stateOffset = -1;
+	AIShip* clone() { return new AIShip(*this); }
+};
 struct Bullet : public Component 
 { 
 	float damage = 0;
@@ -46,6 +53,14 @@ struct TextureBox : public Component
 	//float w, h;
 	Texture texture;
 	TextureBox* clone() { return new TextureBox(*this); }
+};
+struct Animation : public Component
+{
+	SDL_Rect frameRect = { 0,0,0,0 };
+	int frameIndex = 0;
+	int maxFrames = 0;
+	int frameTime = 0;
+	bool loop = false;
 };
 struct Spawner : public Component
 {
