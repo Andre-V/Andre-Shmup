@@ -20,15 +20,10 @@ class EntityFactory
 public:
 	static SDL_Renderer* renderer;
 
-	static Entity& make(bool insert = true)
+	static Entity& make()
 	{
 		Entity* entity = new Entity;
 		return *entity;
-	}
-	template<typename E>
-	static Entity& make()
-	{
-		return make();
 	}
 	template<typename E, typename... ERest>
 	static Entity& make(ERest...)
@@ -37,9 +32,16 @@ public:
 	}
 
 	template<>
-	static Entity& make<Asteroid>()
+	static Entity& make<AIShip>()
 	{
 		Entity& entity = make();
+		entity.add<AIShip>();
+		return entity;
+	}
+	template<>
+	static Entity& make<Asteroid>()
+	{
+		Entity& entity = make<AIShip>();
 		
 		entity.add<Ship>();
 		entity.add<Health>().health = 10;

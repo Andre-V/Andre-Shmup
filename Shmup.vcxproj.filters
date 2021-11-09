@@ -101,5 +101,8 @@
     <ClCompile Include="EntityFactory.cpp">
       <Filter>Header Files\ECS\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="FileLoadFactory.cpp">
+      <Filter>Header Files\ECS\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,22 +11,45 @@ using namespace nlohmann;
 class EntityFileLoader
 {
 private:
-	std::map<string, Entity& (*)()> stringToEntity;
+	static std::map<int, Entity& (*)()> typeMap;
+	enum field { type, time, flip, offset, posX, posY};
 public:
-	static void load(string filename, IEntityInsert& manager)
+	static Entity& load(string filename)
 	{
+		Entity& gameSpawner = EntityFactory::make<GameSpawner>();
+		Spawner& spawner = gameSpawner.get<Spawner>();
+		spawner.loop = true;
+
 		json j;
 		ifstream file;
 
 		file.open(filename);
-
 		file >> j;
 
-		for (auto entity = j.begin(); entity != j.end(); entity++)
+		for (auto e = j["entities"].begin(); e != j["entities"].end(); e++)
 		{
+			int type = (*e)[field::type].get<int>();
 
+			Entity* entity;
+			if (typeMap.count(type) == 0) { continue; }
+			entity = &typeMap[type]();
+			
+			int time = (*e)[field::time].get<int>();
+			bool flip = (*e)[field::flip].get<int>();
+			int offset = (*e)[field::offset].get<int>();
+			float posX = (*e)[field::posX].get<int>();
+			float posY = (*e)[field::posY].get<int>();
+
+			AIShip& aiShip = entity->get<AIShip>();
+			aiShip.flipped = flip;
+			aiShip.stateOffset = offset;
+
+			entity->add<Position>().position = { posX, posY };
+
+			spawner.add(entity, time);
 		}
 
 		file.close();
+		return gameSpawner;
 	}
 };
