@@ -22,15 +22,18 @@ struct AIShip : public Component
 	int stateOffset = -1;
 	AIShip* clone() { return new AIShip(*this); }
 };
+struct Jet : public Component { };
 struct Bullet : public Component 
 { 
 	float damage = 0;
 	Bullet* clone() { return new Bullet(*this); }
 };
+struct EnemysBullet : public Component { };
+struct PlayersBullet : public Component {};
 // Data components: components that hold data
 struct Health : public Component
 {
-	float health = 0;
+	float health = 1;
 	Health* clone() { return new Health(*this); }
 };
 struct Position : public Component
@@ -66,7 +69,6 @@ struct Spawner : public Component
 {
 	vector<pair<Entity*, int>> sequence;
 	vector<float2> offsets;
-	shared_ptr<float2> origin = shared_ptr<float2>(new float2{ 0,0 });
 	int index = 0;
 	int ticks = 0;
 	bool active = true;
@@ -82,5 +84,5 @@ struct Spawner : public Component
 		this->add(entity, ticks);
 		offsets.push_back(offset);
 	}
-	Spawner* clone() { return new Spawner(*this); }
+	Spawner* clone()  {  return new Spawner(*this); }
 };

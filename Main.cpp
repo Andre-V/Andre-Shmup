@@ -13,7 +13,7 @@ void init(Game& game)
 	EntityFactory factory;
 	game.enttMngr().insert(factory.make<Player>());
 	
-	Entity& gameSpawner = EntityFileLoader::load("levels/level_0");
+	Entity& gameSpawner = EntityFileLoader::load("levels/level_0", game);
 	
 	/*
 	Spawner& spawner = gameSpawner.get<Spawner>();
@@ -25,14 +25,14 @@ void init(Game& game)
 	game.enttMngr().insert(gameSpawner);
 
 	game.addSystem(new SysPlayerInput);
+	game.addSystem(new SysJetAI);
 	game.addSystem(new SysMove);
 	game.addSystem(new SysRender);
 	game.addSystem(new SysUpdateSpawners);
 	game.addSystem(new SysShipShoot);
-	game.addSystem(new SysBulletCollisions);
+	game.addSystem(new SysHitEnemyCollisions);
 	game.addSystem(new SysDestroyNoHealth);
 	game.addSystem(new SysDestroyOutOfBounds);
-
 	
 }
 

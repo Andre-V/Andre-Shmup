@@ -31,8 +31,8 @@ public:
 			}
 			else
 			{
-				if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W]) { vel.y = -2; }
-				if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S]) { vel.y = 2; }
+				if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W]) { vel.y = -3; }
+				if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S]) { vel.y = 3; }
 			}
 			if (!(keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]
 				|| keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D]))
@@ -42,9 +42,9 @@ public:
 			else
 			{
 				if (keystate[SDL_SCANCODE_LEFT]
-					|| keystate[SDL_SCANCODE_A]) { vel.x = -2; }
+					|| keystate[SDL_SCANCODE_A]) { vel.x = -3; }
 				if (keystate[SDL_SCANCODE_RIGHT]
-					|| keystate[SDL_SCANCODE_D]) { vel.x = 2; }
+					|| keystate[SDL_SCANCODE_D]) { vel.x = 3; }
 			}
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
@@ -110,6 +110,39 @@ public:
 				}
 
 			}*/
+			
+		}
+	}
+};
+
+class SysJetAI : public System
+{
+	void update() override
+	{
+		Entities jets = entitySource->get<Jet>();
+		for (auto& jet : jets)
+		{
+			AIShip& ai = jet->get<AIShip>();
+			switch (ai.state)
+			{
+				case 0:
+					ai.stateOffset -= 1;
+					if (ai.stateOffset <= 0) 
+					{ 
+						ai.state = 1; 
+					}
+					break;
+				case 1:
+					jet->get<Ship>().shoot = true;
+					jet->get<Velocity>().velocity = { 2, 2 };
+					break;
+				default:
+					break;
+			}
+			if (ai.flipped)
+			{
+				jet->get<Velocity>().velocity.x *= -1;
+			}
 		}
 	}
 };
@@ -122,7 +155,7 @@ public:
 		Entities entities = entitySource->get<Position, Velocity>();
 		for (auto& entity : entities)
 		{
-			entity->get<Position>().position += entity->get<Velocity>().velocity;
+			entity->get<Position>().position += entity->get<Velocity>().velocity;		
 		}
 	}
 };
@@ -182,14 +215,15 @@ public:
 						copy->active = true;
 						entitySource->insert(*copy);
 
-						// Spawn entity relative to origin ((0,0) by default).
-						if (copy->has<Position>())
+						
+						// Spawn entity relative to parent entity, (0,0) by default.
+						if (!copy->has<Position>())
 						{
-							copy->get<Position>().position += *spawner.origin;
-						}
-						else
-						{
-							copy->add<Position>().position = *spawner.origin;
+							copy->add<Position>();
+							if (entity->has<Position>())
+							{
+								copy->get<Position>().position = entity->get<Position>().position;
+							}
 						}
 
 						// Update other spawner data
@@ -221,12 +255,12 @@ public:
 	}
 };
 
-class SysBulletCollisions : public System
+class SysHitEnemyCollisions : public System
 {
 	// TODO: Use hitboxes instead
 	void update() override
 	{
-		Entities bullets = entitySource->get<Bullet, Position, Dimensions>();
+		Entities bullets = entitySource->get<Bullet, PlayersBullet, Position, Dimensions>();
 		Entities enemies = entitySource->get<Ship, Health, Position, Dimensions>();
 		for (auto& bullet : bullets)
 		{
