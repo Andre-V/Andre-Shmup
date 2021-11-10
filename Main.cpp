@@ -27,6 +27,7 @@ void init(Game& game)
 	game.addSystem(new SysPlayerInput);
 	game.addSystem(new SysJetAI);
 	game.addSystem(new SysMove);
+	game.addSystem(new SysMoveCamera);
 	game.addSystem(new SysRender);
 	game.addSystem(new SysUpdateSpawners);
 	game.addSystem(new SysShipShoot);

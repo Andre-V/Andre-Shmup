@@ -21,6 +21,8 @@ public:
 		for (auto& entity : entities)
 		{
 			float2& vel = entity->get<Velocity>().velocity;
+			float2& pos = entity->get<Position>().position;
+			Dimensions& dim = entity->get<Dimensions>();
 			const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 
 			// TO DO: Use key-mapping to make this prettier
@@ -42,9 +44,9 @@ public:
 			else
 			{
 				if (keystate[SDL_SCANCODE_LEFT]
-					|| keystate[SDL_SCANCODE_A]) { vel.x = -3; }
+					|| keystate[SDL_SCANCODE_A]) { vel.x = -4; }
 				if (keystate[SDL_SCANCODE_RIGHT]
-					|| keystate[SDL_SCANCODE_D]) { vel.x = 3; }
+					|| keystate[SDL_SCANCODE_D]) { vel.x = 4; }
 			}
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
@@ -53,6 +55,23 @@ public:
 			else
 			{
 				entity->get<Ship>().shoot = false;
+			}
+
+			if (pos.y - dim.h / 2 <= 0 && vel.y < 0)
+			{
+				vel.y = 0;
+			}
+			else if (pos.y + dim.h / 2 >= gameInfo->SCREEN_HEIGHT && vel.y > 0)
+			{
+				vel.y = 0;
+			}
+			if (pos.x - dim.w / 2 <= -gameInfo->MAX_PLAY_DISTANCE && vel.x < 0)
+			{
+				vel.x = 0;
+			}
+			else if (pos.x + dim.w / 2 >= gameInfo->MAX_PLAY_DISTANCE && vel.x > 0)
+			{
+				vel.x = 0;
 			}
 			/*
 			for (auto& input : gameInfo->sdlEvents)
@@ -160,6 +179,21 @@ public:
 	}
 };
 
+class SysMoveCamera: public System
+{
+public:
+	// Move camera according to player position
+	void update() override
+	{
+		Entities entities = entitySource->get<Player>();
+		for (auto& entity : entities)
+		{
+			float&& prop = entity->get<Position>().position.x / gameInfo->MAX_PLAY_DISTANCE;
+			gameInfo->cameraPosition.x = (gameInfo->MAX_PLAY_DISTANCE - gameInfo->WIDTH_HALF)*prop - gameInfo->WIDTH_HALF;
+		}
+	}
+};
+
 class SysRender : public System
 {
 public:
@@ -170,7 +204,7 @@ public:
 		{
 			float2& pos = entity->get<Position>().position;
 			Dimensions& dim = entity->get<Dimensions>();
-			entity->get<TextureBox>().texture.render(toRect(pos, dim));
+			entity->get<TextureBox>().texture.render(toRect(pos - gameInfo->cameraPosition, dim));
 		}
 	}
 };

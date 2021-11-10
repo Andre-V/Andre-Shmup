@@ -96,7 +96,7 @@ public:
 		entity.add<Player>();
 		entity.add<Ship>();
 		entity.add<Spawner>();
-		entity.add<Position>().position = float2{ 384, 900 };
+		entity.add<Position>().position = float2{ 0, 900 };
 		entity.add<Velocity>().velocity = float2{ 0, 0 };
 		entity.add<Dimensions>().w = 50;
 
