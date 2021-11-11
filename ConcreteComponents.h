@@ -23,6 +23,7 @@ struct AIShip : public Component
 	AIShip* clone() { return new AIShip(*this); }
 };
 struct Jet : public Component { };
+struct Heli : public Component { };
 struct Bullet : public Component 
 { 
 	float damage = 0;
@@ -76,7 +77,7 @@ struct Spawner : public Component
 
 	void add(Entity* entity, int ticks)
 	{
-		entity->active = false;
+		if (entity != nullptr) { entity->active = false; }
 		sequence.push_back({ entity, ticks });
 	}
 	void add(Entity* entity, int ticks, float2 offset)

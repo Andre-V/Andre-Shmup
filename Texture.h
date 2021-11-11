@@ -26,7 +26,7 @@ public:
 		SDL_Surface* surface = IMG_Load(path.c_str());
 		if (surface != nullptr)
 		{
-			SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGBA(surface->format, 0x00, 0xFF, 0x00, 0xFF));
+			SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGBA(surface->format, 0x00, 0x00, 0x00, 0xFF));
 			newTexture = SDL_CreateTextureFromSurface(renderer, surface);
 			SDL_FreeSurface(surface);
 		}

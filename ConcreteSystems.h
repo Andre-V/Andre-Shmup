@@ -149,19 +149,70 @@ class SysJetAI : public System
 					if (ai.stateOffset <= 0) 
 					{ 
 						ai.state = 1; 
+						jet->get<Ship>().shoot = true;
+						jet->get<Velocity>().velocity = { 2, 2 };
+						if (ai.flipped)
+						{
+							jet->get<Velocity>().velocity.x *= -1;
+						}
 					}
 					break;
 				case 1:
-					jet->get<Ship>().shoot = true;
-					jet->get<Velocity>().velocity = { 2, 2 };
 					break;
 				default:
 					break;
 			}
-			if (ai.flipped)
+		}
+	}
+};
+
+class SysHeliAI : public System
+{
+	void update() override
+	{
+		Entities helis = entitySource->get<Heli>();
+		for (auto& heli : helis)
+		{
+			AIShip& ai = heli->get<AIShip>();
+			ai.stateOffset -= 1;
+			switch (ai.state)
 			{
-				jet->get<Velocity>().velocity.x *= -1;
+				case 0: // MOVE FORWARD PHASE
+					if (ai.stateOffset <= 0)
+					{
+						ai.stateOffset = 250;
+						ai.state = 1;
+						heli->get<Velocity>().velocity = { 0, 0.3 };
+						heli->get<Ship>().shoot = true;
+					}
+					break;
+				case 1: // STATIONARY SHOOT PHASE
+					if (ai.stateOffset <= 0)
+					{
+						ai.stateOffset = 60;
+						ai.state = 2;
+						heli->get<Velocity>().velocity = { 2, 0 };
+						heli->get<Ship>().shoot = false;
+						if (ai.flipped)
+						{
+							heli->get<Velocity>().velocity.x *= -1;
+						}
+					}
+					break;
+				case 2: // MOVE SIDEWAYS PHASE
+					if (ai.stateOffset <= 0)
+					{
+						ai.stateOffset = 250;
+						ai.state = 1;
+						ai.flipped = !ai.flipped;
+						heli->get<Velocity>().velocity = { 0, 0.3 };
+						heli->get<Ship>().shoot = true;
+					}
+					break;
+				default:
+					break;
 			}
+			
 		}
 	}
 };
@@ -244,26 +295,29 @@ public:
 					pair<Entity*, int> next;
 					while ((next = spawner.sequence[spawner.index]).second == spawner.ticks)
 					{
-						// Clone entity
-						Entity* copy = new Entity(*next.first);
-						copy->active = true;
-						entitySource->insert(*copy);
-
-						
-						// Spawn entity relative to parent entity, (0,0) by default.
-						if (!copy->has<Position>())
+						// Skip null entities, can also be used to add delays
+						if (next.first != nullptr)
 						{
-							copy->add<Position>();
-							if (entity->has<Position>())
+							// Clone entity
+							Entity* copy = new Entity(*next.first);
+							copy->active = true;
+							entitySource->insert(*copy);
+
+
+							// Spawn entity relative to parent entity, (0,0) by default.
+							if (!copy->has<Position>())
 							{
-								copy->get<Position>().position = entity->get<Position>().position;
+								copy->add<Position>();
+								if (entity->has<Position>())
+								{
+									copy->get<Position>().position = entity->get<Position>().position;
+								}
 							}
 						}
-
 						// Update other spawner data
 						spawner.ticks = 0;
 						spawner.index++;
-  						if (spawner.loop)
+						if (spawner.loop)
 						{
 							spawner.index %= spawner.sequence.size();
 						}
@@ -274,7 +328,6 @@ public:
 								break;
 							}
 						}
-					
 					}
 					spawner.ticks++;
 				}

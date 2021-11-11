@@ -15,11 +15,11 @@ private:
 	static std::map<int, Entity& (*)()> typeMap;
 	enum field { type, time, flip, offset, posX, posY};
 public:
-	static Entity& load(string filename, const GameInfo& gameInfo)
+	static std::map<string,Entity*> load(string filename, const GameInfo& gameInfo)
 	{
+		std::map<string, Entity*> dataMap;
 		Entity& gameSpawner = EntityFactory::make<GameSpawner>();
 		Spawner& spawner = gameSpawner.get<Spawner>();
-		spawner.loop = true;
 
 		json j;
 		ifstream file;
@@ -27,6 +27,7 @@ public:
 		file.open(filename);
 		file >> j;
 
+		// LOAD ENTITIES AND ADD TO SPAWNER
 		for (auto e = j["entities"].begin(); e != j["entities"].end(); e++)
 		{
 			int type = (*e)[field::type].get<int>();
@@ -58,6 +59,7 @@ public:
 		}
 
 		file.close();
-		return gameSpawner;
+		dataMap["spawner"] = &gameSpawner;
+		return dataMap;
 	}
 };

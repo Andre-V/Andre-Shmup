@@ -13,7 +13,7 @@ void init(Game& game)
 	EntityFactory factory;
 	game.enttMngr().insert(factory.make<Player>());
 	
-	Entity& gameSpawner = EntityFileLoader::load("levels/level_0", game);
+	std::map<string,Entity*> gameData = EntityFileLoader::load("levels/level_0", game);
 	
 	/*
 	Spawner& spawner = gameSpawner.get<Spawner>();
@@ -22,10 +22,11 @@ void init(Game& game)
 	spawner.add(&factory.make<Asteroid>(float2{ 500,0 }, float2{ 0,2.2 }), 60);
 	spawner.add(&factory.make<Asteroid>(float2{ 600,0 }, float2{ 0,1.7 }), 150);
 	spawner.add(&factory.make<Asteroid>(float2{ 128,0 }, float2{ 0,2.5 }), 50);*/
-	game.enttMngr().insert(gameSpawner);
+	game.enttMngr().insert(*gameData["spawner"]);
 
 	game.addSystem(new SysPlayerInput);
 	game.addSystem(new SysJetAI);
+	game.addSystem(new SysHeliAI);
 	game.addSystem(new SysMove);
 	game.addSystem(new SysMoveCamera);
 	game.addSystem(new SysRender);

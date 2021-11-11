@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <math.h>
 #include "Entity.h"
 #include "EntityInterfaces.h"
 #include "ConcreteComponents.h"
@@ -30,7 +31,7 @@ public:
 	template<typename E, typename... ERest>
 	static Entity& make(ERest...)
 	{
-		return this->make<E>();
+		return make<E>();
 	}
 
 	template<>
@@ -75,16 +76,39 @@ public:
 		entity.add<Spawner>();
 		entity.get<AIShip>().stateOffset = 100;
 		entity.get<Health>().health = 5;
-		entity.get<TextureBox>().texture.load("textures/test.png");
+		entity.get<TextureBox>().texture.load("textures/jet.png");
 		entity.get<Dimensions>().w = 50;
 		entity.get<Dimensions>().h = 50;
 		entity.get<Velocity>().velocity = float2{ 0, 4 };
 		entity.get<Spawner>().active = false;
 		entity.get<Spawner>().loop = false;
-		entity.get<Spawner>().ticks = 0;
 		entity.get<Spawner>().add(&make<BasicBullet>(), 0);
-		Position* test = &entity.get<Position>();
-		Spawner& test2 = entity.get<Spawner>();
+		return entity;
+	}
+	template<>
+	static Entity& make<Heli>()
+	{
+		Entity& entity = make<AIShip>();
+		entity.add<Heli>();
+		entity.add<Spawner>();
+		entity.get<AIShip>().stateOffset = 100;
+		entity.get<Health>().health = 10;
+		entity.get<TextureBox>().texture.load("textures/heli.png");
+		entity.get<Dimensions>().w = 75;
+		entity.get<Dimensions>().h = 75;
+		entity.get<Velocity>().velocity = float2{ 0, 3 };
+		entity.get<Spawner>().add(&make<BasicBullet>(), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(0.7854f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(-0.7854f), 0);
+		entity.get<Spawner>().add(nullptr, 50);
+		entity.get<Spawner>().add(&make<BasicBullet>(), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(0.7854f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(-0.7854f), 0);
+		entity.get<Spawner>().add(nullptr, 50);
+		entity.get<Spawner>().add(&make<BasicBullet>(), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(0.7854f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(-0.7854f), 0);
+		entity.get<Spawner>().add(nullptr, 150);
 		return entity;
 	}
 
@@ -141,11 +165,18 @@ public:
 	{
 		Entity& entity = make();
 		entity.add<Bullet>().damage = 1;
-		entity.add<Dimensions>().w = 10;
-		entity.get<Dimensions>().h = 10;
+		entity.add<Dimensions>().w = 15;
+		entity.get<Dimensions>().h = 15;
 		entity.add<Velocity>().velocity = float2{ 0, 3 };
 		entity.add<TextureBox>().texture.renderer = renderer;
-		entity.get<TextureBox>().texture.load("textures/test.png");
+		entity.get<TextureBox>().texture.load("textures/pellet.png");
+		return entity;
+	}
+	template<>
+	static Entity& make<BasicBullet, float>(float radians)
+	{
+		Entity& entity = make<BasicBullet>();
+		entity.get<Velocity>().velocity = rot(radians,entity.get<Velocity>().velocity);
 		return entity;
 	}
 	template<>
@@ -153,7 +184,8 @@ public:
 	{
 		Entity& entity = make();
 		entity.add<Spawner>();
-		entity.get<Spawner>().loop = true;
+		entity.get<Spawner>().loop = false;
 		return entity;
 	}
+
 };
