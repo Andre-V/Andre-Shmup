@@ -31,7 +31,7 @@ public:
 	template<typename E, typename... ERest>
 	static Entity& make(ERest...)
 	{
-		return make<E>();
+		return make();
 	}
 
 	template<>
@@ -187,5 +187,26 @@ public:
 		entity.get<Spawner>().loop = false;
 		return entity;
 	}
+	template<>
+	static Entity& make<Background, string, float, float>(string path, float speed, float screenHeight)
+	{
+		Entity& entity = make();
+		entity.add<Background>();
+		entity.add<Position>();
+		entity.add<Velocity>();
+		entity.add<Dimensions>();
+		entity.add<TextureBox>().texture.renderer = renderer;
+		entity.get<TextureBox>().texture.load(path);
+		entity.get<Velocity>().velocity = { 0, speed };
 
+		// Adjust initial position and size
+		Dimensions& dim = entity.get<Dimensions>();
+		float2& pos = entity.get<Position>().position;
+		int w, h;
+		SDL_QueryTexture(entity.get<TextureBox>().texture.texture, nullptr, nullptr, &w, &h);
+		dim.w = w; dim.h = h;
+		pos.y -= dim.h / 2.0f - screenHeight;
+
+		return entity;
+	}
 };

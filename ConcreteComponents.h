@@ -87,3 +87,7 @@ struct Spawner : public Component
 	}
 	Spawner* clone()  {  return new Spawner(*this); }
 };
+struct Background : public Component
+{
+
+};

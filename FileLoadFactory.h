@@ -57,9 +57,18 @@ public:
 
 			spawner.add(entity, time);
 		}
+		// LOAD BACKGROUNDS
+		Entity& background = EntityFactory::make<Background>(j["background"].get<string>(),0.3f, gameInfo.SCREEN_HEIGHT);
+		// LOAD FOREGROUND
+		Entity& foreground = EntityFactory::make<Background>(j["foreground"].get<string>(),0.7f,gameInfo.SCREEN_HEIGHT);
+
 
 		file.close();
+
 		dataMap["spawner"] = &gameSpawner;
+		dataMap["background"] = &background;
+		dataMap["foreground"] = &foreground;
+
 		return dataMap;
 	}
 };

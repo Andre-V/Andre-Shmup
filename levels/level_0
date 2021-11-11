@@ -1,7 +1,6 @@
 {
-"background":"textures/level_0_0.png",
-"layer_1":"textures/level_0_1.png",
-"layer_2":"textures/level_0_2.png",
+"background":"textures/level_0_background.png",
+"foreground":"textures/level_0_foreground.png",
 "entities":
 [
 	[0,3,0,2,0,0],

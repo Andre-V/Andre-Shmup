@@ -260,6 +260,33 @@ public:
 	}
 };
 
+class SysRenderBackground : public System
+{
+	void update() override
+	{
+		Entities entities = entitySource->get<Background, Position, Dimensions, TextureBox>();
+		for (auto& entity : entities)
+		{
+			float2& pos = entity->get<Position>().position;
+			Dimensions& dim = entity->get<Dimensions>();
+			// Detect background going off-screen to reset
+			float cornerY = pos.y - dim.h / 2;
+			if (cornerY >= gameInfo->SCREEN_HEIGHT)
+			{
+				pos.y = 0;
+				pos.y -= dim.h / 2.0f - gameInfo->SCREEN_HEIGHT;
+			}
+			// Render duplicate
+			else if (cornerY > 0)
+			{
+				entity->get<TextureBox>().texture.render(
+					toRect(pos - float2{0,dim.h} - gameInfo->cameraPosition, dim)
+);
+			}
+		}
+	}
+};
+
 class SysShipShoot : public System
 {
 public:
