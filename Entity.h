@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include "Component.h"
 
 using namespace std;
@@ -60,6 +61,20 @@ public:
 		int&& index = CmpMngr::getTypeID<T>();
 		checkCapacity(index);
 		return _key[CmpMngr::getTypeID<T>()];
+	}
+	// compares entity's _key against key.
+	// key's values must contain entity's values (material conditional/IMPLY)
+	bool has(const vector<bool>& key)
+	{
+		checkCapacity(key.size() - 1);
+		for (int i = 0; i < key.size(); i++)
+		{
+			if (!(!key[i] || _key[i])) // !(key[i] => _key[i])
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	// adds new component
 	template<typename T>
