@@ -44,7 +44,11 @@ public:
 
 			AIShip& aiShip = entity->get<AIShip>();
 			aiShip.flipped = flip;
-			aiShip.stateOffset = offset;
+			if (offset >= 0)
+			{
+				aiShip.stateOffset = offset;
+			}
+			
 
 			float2& position = entity->get<Position>().position;
 			position = { posX, posY };

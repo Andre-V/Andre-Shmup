@@ -228,6 +228,10 @@ class SysStealthAI : public System
 		{
 			player = *(players.begin());
 		}
+		else
+		{
+			return;
+		}
 
 		for (auto& stealth : stealths)
 		{

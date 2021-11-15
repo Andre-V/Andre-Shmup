@@ -19,7 +19,7 @@ struct AIShip : public Component
 {
 	int state = 0;
 	bool flipped = false;
-	int stateOffset = -1;
+	int stateOffset = 100;
 	AIShip* clone() { return new AIShip(*this); }
 };
 struct Jet : public Component { };
