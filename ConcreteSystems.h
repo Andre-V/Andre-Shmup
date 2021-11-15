@@ -418,10 +418,20 @@ class SysDestroyOutOfBounds : public System
 {
 	void update() override
 	{
+		const int buffer = 200;
 		Entities entities = entitySource->get<Bullet, Position>();
+		entities.splice(entities.begin(), entitySource->get<Ship, Position>());
+		
+		int x, y;
 		for (auto& entity : entities)
 		{
-			if (entity->get<Position>().position.y < 0)
+			x = entity->get<Position>().position.x;
+			y = entity->get<Position>().position.y;
+			if (y + buffer < 0 || y - buffer > gameInfo->SCREEN_HEIGHT)
+			{
+				entity->active = false;
+			}
+			else if (x + buffer < 0 - gameInfo->MAX_PLAY_DISTANCE || x - buffer > gameInfo->MAX_PLAY_DISTANCE)
 			{
 				entity->active = false;
 			}
