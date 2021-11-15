@@ -24,6 +24,7 @@ struct AIShip : public Component
 };
 struct Jet : public Component { };
 struct Heli : public Component { };
+struct Stealth : public Component { };
 struct Bullet : public Component 
 { 
 	float damage = 0;

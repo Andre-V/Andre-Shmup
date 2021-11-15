@@ -22,6 +22,7 @@ void init(Game& game)
 	game.addSystem(new SysPlayerInput);
 	game.addSystem(new SysJetAI);
 	game.addSystem(new SysHeliAI);
+	game.addSystem(new SysStealthAI);
 	game.addSystem(new SysMove);
 	game.addSystem(new SysMoveCamera);
 	game.addSystem(new SysRenderBackground);
@@ -29,6 +30,7 @@ void init(Game& game)
 	game.addSystem(new SysUpdateSpawners);
 	game.addSystem(new SysShipShoot);
 	game.addSystem(new SysHitEnemyCollisions);
+	game.addSystem(new SysPlayerCollisions);
 	game.addSystem(new SysDestroyNoHealth);
 	game.addSystem(new SysDestroyOutOfBounds);
 	

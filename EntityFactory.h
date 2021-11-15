@@ -111,7 +111,26 @@ public:
 		entity.get<Spawner>().add(nullptr, 150);
 		return entity;
 	}
-
+	template<>
+	static Entity& make<Stealth>()
+	{
+		Entity& entity = make<AIShip>();
+		entity.add<Stealth>();
+		entity.add<Spawner>();
+		entity.get<AIShip>().stateOffset = 200;
+		entity.get<Health>().health = 15;
+		entity.get<TextureBox>().texture.load("textures/stealth.png");
+		entity.get<Dimensions>().w = 150;
+		entity.get<Dimensions>().h = 75;
+		entity.get<Velocity>().velocity = float2{ 0, -4 };
+		entity.get<Spawner>().add(&make<BasicBullet>(), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(0.7854f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(-0.7854f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(0.3927f), 0);
+		entity.get<Spawner>().add(&make<BasicBullet>(-0.3927f), 0);
+		entity.get<Spawner>().add(nullptr, 75);
+		return entity;
+	}
 	template<>
 	static Entity& make<Player>()
 	{
@@ -170,6 +189,7 @@ public:
 		entity.add<Velocity>().velocity = float2{ 0, 3 };
 		entity.add<TextureBox>().texture.renderer = renderer;
 		entity.get<TextureBox>().texture.load("textures/pellet.png");
+		entity.add<EnemysBullet>();
 		return entity;
 	}
 	template<>

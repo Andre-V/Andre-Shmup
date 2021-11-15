@@ -49,6 +49,7 @@ public:
 			float2& position = entity->get<Position>().position;
 			position = { posX, posY };
 			if (posY == 0) { position -= entity->get<Dimensions>().h / 2; }
+			if (posY == -1) { position.y = gameInfo.SCREEN_HEIGHT + entity->get<Dimensions>().h / 2; }
 			/*
 			else if (posY == 0) { position -= entity->get<Dimensions>().h / 2; }
 			if (posX == 0) { position -= entity->get<Dimensions>().h / 2; }

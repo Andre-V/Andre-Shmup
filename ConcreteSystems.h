@@ -217,6 +217,79 @@ class SysHeliAI : public System
 	}
 };
 
+class SysStealthAI : public System
+{
+	void update() override
+	{
+		Entities stealths = entitySource->get<Stealth>();
+		Entities players = entitySource->get<Player>();
+		shared_ptr<Entity> player = nullptr;
+		if (players.size() > 0)
+		{
+			player = *(players.begin());
+		}
+
+		for (auto& stealth : stealths)
+		{
+			AIShip& ai = stealth->get<AIShip>();
+			float2& pos = stealth->get<Position>().position;
+			float2& vel = stealth->get<Velocity>().velocity;
+			ai.stateOffset -= 1;
+			float diff = pos.x - player->get<Position>().position.x;
+			switch (ai.state)
+			{
+				case 0: // MOVE FORWARD
+					if (ai.stateOffset <= 0)
+					{
+						ai.state = 1;
+						vel.y = -1;
+					}
+					break;
+				case 1: // MOVE TOWARDS PLAYER
+					if (player != nullptr)
+					{
+						if (diff > 0)
+						{
+							vel.x = -3;
+						}
+						else
+						{
+							vel.x = 3;
+						}
+						if (diff < 100 && diff > -100) // STATE 2 IF WITHIN RANGE
+						{
+							stealth->get<Ship>().shoot = true;
+							ai.state = 2;
+							vel.y = 0.1;
+						}
+					}
+					break;
+				case 2: // SHOOT + SLOWLY FOLLOW PLAYER
+					if (player != nullptr)
+					{
+						if (diff > 0)
+						{
+							vel.x = -1;
+						}
+						else
+						{
+							vel.x = 1;
+						}
+						if (diff > 200 || diff < -200)
+						{
+							stealth->get<Ship>().shoot = false;
+							ai.state = 1;
+							vel.y = -0.5;
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+};
+
 class SysMove : public System
 {
 public:
@@ -371,7 +444,6 @@ public:
 
 class SysHitEnemyCollisions : public System
 {
-	// TODO: Use hitboxes instead
 	void update() override
 	{
 		Entities bullets = entitySource->get<Bullet, PlayersBullet, Position, Dimensions>();
@@ -393,6 +465,33 @@ class SysHitEnemyCollisions : public System
 				{
 					bullet->active = false;
 					enemy->get<Health>().health -= bullet->get<Bullet>().damage;
+				}
+			}
+		}
+	}
+};
+class SysPlayerCollisions : public System
+{
+	void update() override
+	{
+		Entities players = entitySource->get<Player>();
+		Entities entities = entitySource->get<Bullet, EnemysBullet, Position>();
+		entities.splice(entities.begin(), entitySource->get<AIShip, Position>());
+		for (auto& player : players)
+		{
+			for (auto& entity : entities)
+			{
+				SDL_Rect&& pRect = toRect(
+					player->get<Position>().position, 
+					player->get<Dimensions>()
+				);
+				SDL_Rect&& eRect = toRect(
+					entity->get<Position>().position,
+					entity->get<Dimensions>()
+				);
+				if (SDL_HasIntersection(&pRect, &eRect))
+				{
+					player->active = false;
 				}
 			}
 		}
