@@ -127,7 +127,7 @@ public:
 		entity.get<Dimensions>().h = 50;
 
 		entity.add<TextureBox>().texture.renderer = renderer;
-		entity.get<TextureBox>().texture.load("textures/test.png");
+		entity.get<TextureBox>().texture.load("textures/player.png");
 
 		entity.get<Spawner>().active = false;
 		entity.get<Spawner>().ticks = 0;
@@ -156,7 +156,7 @@ public:
 		entity.get<Dimensions>().h = 20;
 		entity.add<Velocity>().velocity = float2{ 0, -5 };
 		entity.add<TextureBox>().texture.renderer = renderer;
-		entity.get<TextureBox>().texture.load("textures/test.png");
+		entity.get<TextureBox>().texture.load("textures/pellet_player_0.png");
 		entity.add<PlayersBullet>();
 		return entity;
 	}
